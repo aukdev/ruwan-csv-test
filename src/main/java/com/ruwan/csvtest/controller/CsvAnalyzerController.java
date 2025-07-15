@@ -1,5 +1,9 @@
 package com.ruwan.csvtest.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +22,10 @@ public class CsvAnalyzerController {
     }
 
     @GetMapping("/analyze")
-    public ResponseEntity<String> analyzeCsv() {
+    public ResponseEntity<?> analyzeCsv() {
         try {
-            long count = csvAnalyzerService.countTaGreaterThan20();
-            return ResponseEntity.ok("Rows where 'ta' > 20: " + count);
+            List<Long> count = csvAnalyzerService.countTaGreaterThan20();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("count", count));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
